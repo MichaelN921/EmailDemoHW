@@ -1,5 +1,3 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -13,24 +11,18 @@ public class BobsMailbox extends Thread {
     public ArrayList<Mail> inbox;
     public ArrayList<Mail> outbox;
     public boolean gotMail;
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
     int count = 0;
 
     /**
      * Constructor for objects of class BobsMailbox
      */
     public BobsMailbox() {
-        this.inbox = new ArrayList<Mail>();
-        this.outbox = new ArrayList<Mail>();
+        this.inbox = new ArrayList<>();
+        this.outbox = new ArrayList<>();
     }
 
     public void checkMailbox() {
-        if (inbox.size() == 0) {
-            gotMail = false;
-        }
-        else {
-            gotMail = true;
-        }
+        gotMail = inbox.size() != 0;
     }
 
     /**
@@ -45,22 +37,23 @@ public class BobsMailbox extends Thread {
                 if (gotMail) {
                     count ++;
                     for (Mail mail: inbox) {
-                        System.out.println(mail.email() + "\n");
+                        String timeStr = EmailServer.dateFormatter();
+                        System.out.println(mail.email() + "\n" + "Received at " + timeStr + "\n");
                     }
                     inbox.clear();
                     //write reply to Alice
-                    LocalDateTime time = LocalDateTime.now();
-                    String timeStr = dtf.format(time);
+                    String timeStr = EmailServer.dateFormatter();
                     String hello = "Hello ".repeat(count);
                     Mail newMail = new Mail("Bob", "Alice", timeStr, hello);
-                    outbox.add(newMail);
+                    EmailServer.emails.add(newMail);
                 }
                 else {
-                    System.out.println("Bob: I didn't get mail. \n");
+                    String timeStr = EmailServer.dateFormatter();
+                    System.out.println("Bob: I didn't get mail. " + timeStr + "\n");
                 }
             }
         } catch (Exception ex) {
-
+            System.err.println("Mail box not working");
         }
     }
 }
