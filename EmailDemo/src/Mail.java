@@ -34,9 +34,8 @@ public class Mail {
     
     @Override
     public String toString() {
-        String mail = String.format("From: " + this.from + "\nTo: " + this.to +
-        "\nDate: " + this.date + "\n" + this.body);
-        return mail;
+        return "From: " + this.from + "\nTo: " + this.to +
+                "\nDate: " + this.date + "\n" + this.body;
     }
     
     /**
