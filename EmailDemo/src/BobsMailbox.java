@@ -9,8 +9,6 @@ import java.util.ArrayList;
 public class BobsMailbox extends Thread {
     public final int check = 3000;
     public ArrayList<Mail> inbox;
-    public ArrayList<Mail> outbox;
-    public boolean gotMail;
     int count = 0;
 
     /**
@@ -18,11 +16,10 @@ public class BobsMailbox extends Thread {
      */
     public BobsMailbox() {
         this.inbox = new ArrayList<>();
-        this.outbox = new ArrayList<>();
     }
 
-    public void checkMailbox() {
-        gotMail = inbox.size() != 0;
+    public boolean checkMailbox() {
+        return inbox.size() != 0;
     }
 
     /**
@@ -33,12 +30,12 @@ public class BobsMailbox extends Thread {
         try {
             while (System.nanoTime() < EmailServer.endTime) {
                 Thread.sleep(check);
-                checkMailbox();
+                boolean gotMail = checkMailbox();
                 if (gotMail) {
                     count ++;
                     for (Mail mail: inbox) {
                         String timeStr = EmailServer.dateFormatter();
-                        System.out.println(mail.email() + "\n" + "Received at " + timeStr + "\n");
+                        System.out.println(mail + "\n" + "Received at " + timeStr + "\n");
                     }
                     inbox.clear();
                     //write reply to Alice

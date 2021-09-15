@@ -6,7 +6,6 @@ import java.util.*;
 public class AlicesMailbox extends Thread {
     public final int check = 5000;
     public ArrayList<Mail> inbox;
-    public ArrayList<Mail> outbox;
     int count = 0;
 
     /**
@@ -14,10 +13,6 @@ public class AlicesMailbox extends Thread {
      */
     public AlicesMailbox() {
         this.inbox = new ArrayList<>();
-        this.outbox = new ArrayList<>();
-//        String timeStr = EmailServer.dateFormatter();
-//        Mail preloadedMail = new Mail("Bob", "Alice", timeStr, "preloaded mail");
-//        inbox.add(preloadedMail);
     }
 
     
@@ -38,7 +33,7 @@ public class AlicesMailbox extends Thread {
                     count ++;
                     for (Mail mail: inbox) {
                         String timeStr = EmailServer.dateFormatter();
-                        System.out.println(mail.email() + "\n" + "Received at " + timeStr + "\n");
+                        System.out.println(mail + "\n" + "Received at " + timeStr + "\n");
                     }
                     inbox.clear();
                     //write reply to Bob
