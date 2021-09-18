@@ -1,56 +1,16 @@
-import java.util.ArrayList;
-
 /**
- * Write a description of class BobsMailbox here.
+ * Checks Bob's mailbox every 3 seconds and responds if he received mail.
+ * If he didn't receive mail, that is printed to the console. This class extends
+ * MailBox which extends Thread to allow multithreaded operations.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Michael Nasuti
+ * @author Josiah Kowalski
+ * @version 1.0
  */
-public class BobsMailbox extends Thread {
-    public final int check = 3000;
-    public ArrayList<Mail> inbox;
-    int count = 0;
+public class BobsMailbox extends Mailbox {
+    public static final int check = 3000;
 
-    /**
-     * Constructor for objects of class BobsMailbox
-     */
     public BobsMailbox() {
-        this.inbox = new ArrayList<>();
-    }
-
-    public boolean checkMailbox() {
-        return inbox.size() != 0;
-    }
-
-    /**
-     * This thread acts as our client Bob.
-     *
-     */
-    public void run() {
-        try {
-            while (System.nanoTime() < EmailServer.endTime) {
-                Thread.sleep(check);
-                boolean gotMail = checkMailbox();
-                if (gotMail) {
-                    count ++;
-                    for (Mail mail: inbox) {
-                        String timeStr = EmailServer.dateFormatter();
-                        System.out.println(mail + "\n" + "Received at " + timeStr + "\n");
-                    }
-                    inbox.clear();
-                    //write reply to Alice
-                    String timeStr = EmailServer.dateFormatter();
-                    String hello = "Hello ".repeat(count);
-                    Mail newMail = new Mail("Bob", "Alice", timeStr, hello);
-                    EmailServer.emails.add(newMail);
-                }
-                else {
-                    String timeStr = EmailServer.dateFormatter();
-                    System.out.println("Bob: I didn't get mail. " + timeStr + "\n");
-                }
-            }
-        } catch (Exception ex) {
-            System.err.println("Mail box not working");
-        }
+        super("Bob", "Alice", check);
     }
 }

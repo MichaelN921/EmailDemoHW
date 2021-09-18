@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"<Unnamed>","l":"AlicesMailbox"},{"l":"All Classes","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"BobsMailbox"},{"p":"<Unnamed>","l":"EmailServer"},{"p":"<Unnamed>","l":"Mail"},{"p":"<Unnamed>","l":"Mailbox"},{"p":"<Unnamed>","l":"MailTest"}];updateSearchResults();

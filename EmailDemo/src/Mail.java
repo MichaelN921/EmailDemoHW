@@ -1,5 +1,3 @@
-import java.lang.Thread;
-import java.util.*;
 public class Mail {
     public String from;
     public String to;
@@ -15,33 +13,10 @@ public class Mail {
         this.date = date;
         this.body = body;
     }
-    
-    public String setFrom(String name) {
-        return this.from;
-    }
-    
-    public String setTo(String name) {
-        return this.to;
-    }
-    
-    public String setDate(String time) {
-        return this.date;
-    }
-    
-    public String setBody(String words) {
-        return this.body;
-    }
-    
+
     @Override
     public String toString() {
-        return "From: " + this.from + "\nTo: " + this.to +
-                "\nDate: " + this.date + "\n" + this.body;
-    }
-    
-    /**
-     * @return    the email
-     */
-    public String email() {
-        return toString();
+        return "From: " + from + "\nTo: " + to +
+                "\nDate: " + date + "\n" + body;
     }
 }

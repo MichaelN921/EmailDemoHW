@@ -1,27 +1,24 @@
 import java.lang.Thread;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Write a description of class EmailServer here.
+ * Acts as the email server by collecting emails and sending them to users.
+ * Also, acts as the starting point for the user's email clients.
  *
- * @author Michael Nasuti and Josiah Kowalski
- * @version 0.1
+ * @author Michael Nasuti
+ * @author Josiah Kowalski
+ * @version 1.0
  */
 public class EmailServer extends Thread {
     public static ArrayList<Mail> emails;
-    public static long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L, TimeUnit.MINUTES);
+    public static final long endTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(1L, TimeUnit.MINUTES);
 
     /**
      * Constructor for objects of class EmailServer
      */
     public EmailServer() {
         emails = new ArrayList<>();
-        String timeStr = dateFormatter();
-        Mail preloadedMail = new Mail("Bob", "Alice", timeStr, "preloaded mail");
-        emails.add(preloadedMail);
     }
 
     public static void main(String[] args) {
@@ -29,25 +26,40 @@ public class EmailServer extends Thread {
         server.start();
     }
 
-    public static String dateFormatter() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-        LocalDateTime time = LocalDateTime.now();
-        return dtf.format(time);
+    /**
+     * This method acts as a sort, if mail is meant for Alice, it is sent to her, and 
+     * so on.
+     *
+     * @param alice One of the clients using the email.
+     * @param bob One of the clients using the email.
+     */
+    public synchronized void sendMail(AlicesMailbox alice, BobsMailbox bob) {
+        try {
+            int count = 0;
+            for (Mail mail : emails) {
+                if (Objects.equals(mail.to, "Alice")) {
+                    alice.inbox.add(mail);
+                    count ++;
+                } else if (Objects.equals(mail.to, "Bob")) {
+                    bob.inbox.add(mail);
+                    count ++;
+                }
+            }
+            if (count != 0) {
+                emails.clear();
+            }
+
+        }
+        catch (Exception ex) {
+            System.out.println("Server issue, will restart. (" + ex + ")");
+        }
     }
 
-    public void sendMail(AlicesMailbox alice, BobsMailbox bob) {
-        for (Mail mail : emails) {
-            if (Objects.equals(mail.to, "Alice")) {
-                alice.inbox.add(mail);
-            } else if (Objects.equals(mail.to, "Bob")) {
-                bob.inbox.add(mail);
-            }
-        }
-        emails.clear();
-    }
+
 
     /**
-     * Updates the email server, does not return anything.
+     * Updates the email server, does not return anything.  
+     * Clears the server after the mail is sent.
      *
      */
     public void run () {
@@ -56,12 +68,11 @@ public class EmailServer extends Thread {
         BobsMailbox bob = new BobsMailbox();
         bob.start();
         try {
-            while (System.nanoTime() < endTime) {
-                Thread.sleep(100);
+            while (System.nanoTime() < EmailServer.endTime) {
                 sendMail(alice, bob);
             }
         } catch (Exception ex) {
-            System.err.println("Server.exe stopped working.");
+            System.err.println("Server.exe stopped working. (" + ex + ")");
         }
     }
 }
