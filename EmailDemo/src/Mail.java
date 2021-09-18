@@ -1,8 +1,15 @@
+/**
+ * Stores an email with 4 variables, from, to, date, and body.
+ *
+ * @author Michael Nasuti
+ * @author Josiah Kowalski
+ * @version 1.0
+ */
 public class Mail {
-    public String from;
-    public String to;
-    public String date;
-    public String body;
+    public final String from;
+    public final String to;
+    public final String date;
+    public final String body;
 
     /**
      * Constructor for objects of class Mail
@@ -14,9 +21,13 @@ public class Mail {
         this.body = body;
     }
 
-    @Override
+    /**
+     * toString method that returns a formatted string with each of the variables.
+     *
+     * @return A formatted string which can be printed to the console
+     */
     public String toString() {
-        return "From: " + from + "\nTo: " + to +
-                "\nDate: " + date + "\n" + body;
+        return "From: " + this.from + "\nTo: " + this.to +
+                "\nDate: " + this.date + "\n" + this.body;
     }
 }

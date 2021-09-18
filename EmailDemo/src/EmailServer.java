@@ -48,10 +48,9 @@ public class EmailServer extends Thread {
             if (count != 0) {
                 emails.clear();
             }
-
         }
         catch (Exception ex) {
-            System.out.println("Server issue, will restart. (" + ex + ")");
+            System.err.println("Server issue, will restart. (" + ex + ")\n");
         }
     }
 
@@ -72,7 +71,7 @@ public class EmailServer extends Thread {
                 sendMail(alice, bob);
             }
         } catch (Exception ex) {
-            System.err.println("Server.exe stopped working. (" + ex + ")");
+            System.err.println("Server stopped working. (" + ex + ")\n");
         }
     }
 }
